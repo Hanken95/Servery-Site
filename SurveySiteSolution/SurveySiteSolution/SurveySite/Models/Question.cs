@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 namespace SurveySite.Models
 {
     public enum QuestionType { Text, Radio, MultipleChoice }
-    public class QuestionModel
+    public class Question
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public QuestionType QuestionType { get; set; }
-        public string Question { get; set; }
-        public List<string> Answers { get; set; }
-
+        public string QuestionString { get; set; }
+        public List<Answer> Answers { get; set; }
+        public List<Survey> Surveys { get; set; }
     }
 }
