@@ -1,0 +1,57 @@
+﻿@page
+@model SurveySite.Pages.QuestionPages.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Question</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Question.QuestionType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Question.QuestionType)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Question.QuestionString)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Question.QuestionString)
+        </dd>
+    </dl>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Question.Answers[0].AnswerString)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Question.Answers)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AnswerString)
+                    </td>
+                    <td>
+                        <a asp-page="/AnswerPages/Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="/AnswerPages/Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="/AnswerPages/Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Question.Id">Edit</a> |
+    <a asp-page="./Index">To question list</a>
+    <a asp-page="/SurveyPages/Details" asp-route-id="@Model.Question.Survey.Id">To survey that the question is in</a>
+</div>

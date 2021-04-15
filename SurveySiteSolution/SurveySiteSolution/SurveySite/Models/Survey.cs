@@ -11,6 +11,6 @@ namespace SurveySite.Models
         [Key]
         public int Id { get; set; }
         public string SurveyName { get; set; }
-        public List<Question> Questions { get; set; }
+        public List<Question> Questions { get; set; } = new List<Question>();
     }
 }

@@ -15,6 +15,6 @@ namespace SurveySite.Models
         public QuestionType QuestionType { get; set; }
         public string QuestionString { get; set; }
         public List<Answer> Answers { get; set; }
-        public List<Survey> Surveys { get; set; }
+        public Survey Survey { get; set; }
     }
 }
