@@ -20,13 +20,10 @@ namespace SurveySite.Pages.SurveyPages
 
         public List<Survey> Surveys { get;set; }
 
-        public List<Question> Questions { get; set; }
-
-
         public async Task OnGetAsync()
         {
             Surveys = await _context.Survey.ToListAsync();
-            Questions = await _context.Question.ToListAsync();
+            await _context.Question.ToListAsync();
         }
 
         public async Task OnPostSeedDataBase()

@@ -46,10 +46,15 @@ namespace SurveySite.Pages.QuestionPages
             }
 
             Question = await _context.Question.FindAsync(id);
+            await _context.Answer.ToListAsync();
 
             if (Question != null)
             {
                 _context.Question.Remove(Question);
+                foreach (var answer in Question.Answers)
+                {
+                    _context.Answer.Remove(answer);
+                }
                 await _context.SaveChangesAsync();
             }
 

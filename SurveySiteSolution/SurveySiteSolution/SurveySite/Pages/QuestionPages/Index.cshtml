@@ -19,6 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Question[0].QuestionString)
             </th>
+            <th>
+                Nr. of answers
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -30,6 +33,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.QuestionString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Answers.Count)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

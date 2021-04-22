@@ -18,6 +18,9 @@
                 <input asp-for="Survey.SurveyName" class="form-control" />
                 <span asp-validation-for="Survey.SurveyName" class="text-danger"></span>
             </div>
+                <label asp-for="@Model.NumberOfQuestions" class="control-label"></label>
+                <input type="number" asp-for="@Model.NumberOfQuestions" class="form-control">
+                <span asp-validation-for="@Model.NumberOfQuestions" class="text-danger"></span>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

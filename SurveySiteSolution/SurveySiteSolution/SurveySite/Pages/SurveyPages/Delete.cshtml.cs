@@ -53,6 +53,14 @@ namespace SurveySite.Pages.SurveyPages
             if (Survey != null)
             {
                 _context.Survey.Remove(Survey);
+                foreach (var question in Survey.Questions)
+                {
+                    _context.Question.Remove(question);
+                    foreach (var answer in question.Answers)
+                    {
+                        _context.Answer.Remove(answer);
+                    }
+                }
                 await _context.SaveChangesAsync();
             }
 

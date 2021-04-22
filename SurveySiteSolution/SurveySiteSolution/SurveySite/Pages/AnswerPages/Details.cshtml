@@ -27,5 +27,6 @@
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Answer.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index">Back to List</a> |
+    <a asp-page="/QuestionPages/Details" asp-route-id="@Model.Answer.Question.Id">To question that the answer is in</a>
 </div>

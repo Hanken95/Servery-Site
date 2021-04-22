@@ -12,7 +12,6 @@ namespace SurveySite.Pages.SurveyPages
     public class CreateModel : PageModel
     {
         private readonly SurveyDBContext _context;
-
         public CreateModel(SurveyDBContext context)
         {
             _context = context;
@@ -26,6 +25,9 @@ namespace SurveySite.Pages.SurveyPages
         [BindProperty]
         public Survey Survey { get; set; }
 
+        [BindProperty]
+        public int NumberOfQuestions { get; set; }
+
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
@@ -33,11 +35,16 @@ namespace SurveySite.Pages.SurveyPages
             {
                 return Page();
             }
-
+            if (Survey.SurveyName == null)
+            {
+                return NotFound(); 
+            }
             _context.Survey.Add(Survey);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage(
+                "/QuestionPages/CreateMultipleQuestions", 
+                new { numberOfQuestions = NumberOfQuestions, surveyId = Survey.Id });
         }
     }
 }
