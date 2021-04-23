@@ -1,0 +1,50 @@
+﻿@page
+@model SurveySite.Pages.AnswerPages.CreateMultipleAnswersModel
+
+@{
+    ViewData["Title"] = "CreateMultipleAnswers";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Survey.Id" />
+            <input type="hidden" asp-for="Question.Id" />
+            <input type="hidden" asp-for="Question.QuestionString" />
+            <input type="hidden" asp-for="Question.QuestionType" />
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.Survey.SurveyName):
+                @Html.DisplayFor(model => model.Survey.SurveyName)
+                <span asp-validation-for="Survey.SurveyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.Question.QuestionString):
+                @Html.DisplayFor(model => model.Question.QuestionString)
+                <span asp-validation-for="Question.QuestionString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Answer.AnswerString" class="control-label"></label>
+                <input asp-for="Answer.AnswerString" class="form-control" />
+                <span asp-validation-for="Answer.AnswerString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Questions left: <br />
+                @Html.DisplayFor(model => model.NumberOfAnswersLeft)
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="NumberOfQuestionsLeft" />
+                <input type="hidden" asp-for="NumberOfAnswersLeft" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to survey list(The incomplete survey will still exist)</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

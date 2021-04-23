@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Survey list</h1>
 
 <a asp-page="Create">Create</a>
 
@@ -28,7 +28,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Surveys) {
+@foreach (var item in Model.Surveys) 
+{
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.SurveyName)
@@ -37,9 +38,10 @@
                 @Html.DisplayFor(modelItem => item.Questions.Count)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit survey name</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">More details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a> |
+                <a asp-page="./CompleteSurvey" asp-route-surveyId="@item.Id">Complete survey details</a>
             </td>
         </tr>
 }

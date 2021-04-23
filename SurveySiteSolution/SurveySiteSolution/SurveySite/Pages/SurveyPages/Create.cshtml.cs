@@ -44,7 +44,7 @@ namespace SurveySite.Pages.SurveyPages
 
             return RedirectToPage(
                 "/QuestionPages/CreateMultipleQuestions", 
-                new { numberOfQuestions = NumberOfQuestions, surveyId = Survey.Id });
+                new { numberOfQuestionsLeft = NumberOfQuestions, surveyId = Survey.Id });
         }
     }
 }

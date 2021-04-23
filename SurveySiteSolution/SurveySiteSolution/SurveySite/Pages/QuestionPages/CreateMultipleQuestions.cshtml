@@ -5,10 +5,6 @@
     ViewData["Title"] = "CreateMultipleQuestions";
 }
 
-<h1>CreateMultipleQuestions</h1>
-
-<h4>Survey</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -21,6 +17,11 @@
                 <span asp-validation-for="Survey.SurveyName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Question.QuestionString" class="control-label"></label>
+                <input asp-for="Question.QuestionString" class="form-control" />
+                <span asp-validation-for="Question.QuestionString" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Question.QuestionType" class="control-label"></label>
                 <select asp-for="Question.QuestionType" class="form-control">
                     <option value="">Select a type</option>
@@ -31,9 +32,9 @@
                 <span asp-validation-for="Question.QuestionType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Question.QuestionString" class="control-label"></label>
-                <input asp-for="Question.QuestionString" class="form-control" />
-                <span asp-validation-for="Question.QuestionString" class="text-danger"></span>
+                <label asp-for="@Model.NumberOfAnswers" class="control-label"></label>
+                <input type="number" asp-for="@Model.NumberOfAnswers" class="form-control">
+                <span asp-validation-for="@Model.NumberOfAnswers" class="text-danger"></span>
             </div>
             <div class="form-group">
                 Questions left: <br />
@@ -48,7 +49,7 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="/SurveyPages/Index">Back to survey list(The incomplete survey will still exist)</a>
 </div>
 
 @section Scripts {

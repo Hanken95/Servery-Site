@@ -24,6 +24,7 @@ namespace SurveySite.Pages.QuestionPages
         public async Task OnGetAsync()
         {
             Question = await _context.Question.ToListAsync();
+            await _context.Answer.ToListAsync();
         }
     }
 }

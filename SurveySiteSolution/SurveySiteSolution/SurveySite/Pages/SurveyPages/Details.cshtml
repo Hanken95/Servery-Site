@@ -5,7 +5,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Survey details</h1>
 
 <div>
     <h4>Survey</h4>
@@ -47,9 +47,9 @@
                     @Html.DisplayFor(modelItem => item.Answers.Count)
                 </td>
                 <td>
-                    <a asp-page="/QuestionPages/Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-page="/QuestionPages/Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="/QuestionPages/Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-page="/QuestionPages/Edit" asp-route-id="@item.Id">Edit question</a> |
+                    <a asp-page="/QuestionPages/Details" asp-route-id="@item.Id">Question details</a> |
+                    <a asp-page="/QuestionPages/Delete" asp-route-id="@item.Id">Delete question</a>
                 </td>
             </tr>
             }
@@ -58,6 +58,6 @@
 </div>
 
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Survey.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Edit" asp-route-id="@Model.Survey.Id">Edit survey name</a> |
+    <a asp-page="./Index">Back to survey List</a>
 </div>

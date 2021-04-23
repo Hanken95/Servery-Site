@@ -5,23 +5,23 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Question details</h1>
 
 <div>
     <h4>Question</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Question.QuestionType)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Question.QuestionType)
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Question.QuestionString)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Question.QuestionString)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Question.QuestionType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Question.QuestionType)
         </dd>
     </dl>
     <table class="table">

@@ -28,8 +28,11 @@ namespace SurveySite.Pages.QuestionPages
 
         [BindProperty]
         public int? NumberOfQuestionsLeft { get; set; }
+        
+        [BindProperty]
+        public int? NumberOfAnswers { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? numberOfQuestions,int? surveyId)
+        public async Task<IActionResult> OnGetAsync(int? numberOfQuestionsLeft,int? surveyId)
         {
             if (surveyId == null)
             {
@@ -38,7 +41,7 @@ namespace SurveySite.Pages.QuestionPages
 
             Survey = await _context.Survey.FirstOrDefaultAsync(m => m.Id == surveyId);
 
-            NumberOfQuestionsLeft = numberOfQuestions;
+            NumberOfQuestionsLeft = numberOfQuestionsLeft;
 
             if (Survey == null)
             {
@@ -74,12 +77,21 @@ namespace SurveySite.Pages.QuestionPages
                     throw;
                 }
             }
-            NumberOfQuestionsLeft -= 1;
             if (NumberOfQuestionsLeft > 0)
             {
-                return RedirectToPage(new { numberOfQuestions = NumberOfQuestionsLeft, surveyId = Survey.Id });
+                NumberOfQuestionsLeft -= 1;
+                if (Question.QuestionType == QuestionType.Text)
+                {
+                    return RedirectToPage(
+                        new { numberOfQuestionsLeft = NumberOfQuestionsLeft, 
+                            surveyId = Survey.Id });
+                }
+                return RedirectToPage("/AnswerPages/CreateMultipleAnswers", 
+                    new { numberOfQuestionsLeft = NumberOfQuestionsLeft, 
+                        numberOfAnswers = NumberOfAnswers, 
+                        questionId = Question.Id });
             }
-            return RedirectToPage("Index");
+            return RedirectToPage("/SurveyPages/CompleteSurvey", new { surveyId = Survey.Id });
         }
 
         private bool SurveyExists(int id)

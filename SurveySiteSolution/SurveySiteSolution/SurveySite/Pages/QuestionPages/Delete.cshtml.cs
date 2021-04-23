@@ -30,6 +30,7 @@ namespace SurveySite.Pages.QuestionPages
             }
 
             Question = await _context.Question.FirstOrDefaultAsync(m => m.Id == id);
+            await _context.Answer.ToListAsync();
 
             if (Question == null)
             {
