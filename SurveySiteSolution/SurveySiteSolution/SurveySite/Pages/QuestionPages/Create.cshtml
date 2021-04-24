@@ -29,6 +29,22 @@
                 <span asp-validation-for="Question.QuestionType" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="SurveyId" class="control-label">Add question to existing survey?</label>
+                <select asp-for="SurveyId" class="form-control">
+                    <option value="">No</option>
+                    @foreach (var survey in Model.Surveys)
+	                {
+                        <option value="@survey.Id">@survey.SurveyName</option>
+	                }
+                </select>
+                <span asp-validation-for="SurveyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.NumberOfAnswers" class="control-label"></label>
+                <input type="number" asp-for="@Model.NumberOfAnswers" class="form-control">
+                <span asp-validation-for="@Model.NumberOfAnswers" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

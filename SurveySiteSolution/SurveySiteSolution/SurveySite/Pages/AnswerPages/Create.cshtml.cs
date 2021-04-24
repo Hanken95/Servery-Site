@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SurveySite;
 using SurveySite.Models;
 
@@ -19,13 +20,18 @@ namespace SurveySite.Pages.AnswerPages
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
+            Questions = await _context.Question.ToListAsync();
             return Page();
         }
 
         [BindProperty]
         public Answer Answer { get; set; }
+
+        public List<Question> Questions { get; set; }
+
+        public int? QuestionId { get; set; }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -34,8 +40,17 @@ namespace SurveySite.Pages.AnswerPages
             {
                 return Page();
             }
+            if (QuestionId != null)
+            {
+                await _context.Question.ToListAsync();
+                var question = await _context.Question.FirstOrDefaultAsync(s => s.Id == QuestionId);
+                question.Answers.Add(Answer);
+            }
+            else
+            {
+                await _context.Answer.AddAsync(Answer);
+            }
 
-            _context.Answer.Add(Answer);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

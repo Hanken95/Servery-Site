@@ -20,7 +20,7 @@ namespace SurveySite.Pages.AnswerPages
         }
 
         [BindProperty]
-        public Survey Survey { get; set; }
+        public Survey Survey { get; set; } = new Survey();
 
         [BindProperty]
         public Question Question { get; set; }
@@ -32,9 +32,9 @@ namespace SurveySite.Pages.AnswerPages
         public int NumberOfAnswersLeft { get; set; }
 
         [BindProperty]
-        public int NumberOfQuestionsLeft { get; set; }
+        public int? NumberOfQuestionsLeft { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int numberOfQuestionsLeft, int numberOfAnswers, int? questionId)
+        public async Task<IActionResult> OnGetAsync(int? numberOfQuestionsLeft, int numberOfAnswers, int? questionId)
         {
             if (questionId == null)
             {
@@ -43,7 +43,10 @@ namespace SurveySite.Pages.AnswerPages
 
             Question = await _context.Question.FirstOrDefaultAsync(q => q.Id == questionId);
             await _context.Survey.ToListAsync();
-            Survey = await _context.Survey.FirstOrDefaultAsync(s => s.Id == Question.Survey.Id);
+            if (Question.Survey != null)
+            {
+                Survey = await _context.Survey.FirstOrDefaultAsync(s => s.Id == Question.Survey.Id);
+            }
 
 
             NumberOfAnswersLeft = numberOfAnswers;
@@ -63,7 +66,6 @@ namespace SurveySite.Pages.AnswerPages
                 return Page();
             }
 
-            await _context.Survey.ToListAsync();
             Question.Answers.Add(Answer);
             _context.Attach(Question).State = EntityState.Modified;
 
@@ -90,6 +92,15 @@ namespace SurveySite.Pages.AnswerPages
                     numberOfAnswers = NumberOfAnswersLeft, 
                     numberOfQuestionsLeft = NumberOfQuestionsLeft, 
                     questionId = Question.Id });
+            }
+            else if (NumberOfQuestionsLeft == null)
+            {
+                return RedirectToPage(
+                    "/QuestionPages/Details",
+                    new
+                    {
+                        id = Question.Id
+                    });
             }
             else if (NumberOfQuestionsLeft > 0)
             {

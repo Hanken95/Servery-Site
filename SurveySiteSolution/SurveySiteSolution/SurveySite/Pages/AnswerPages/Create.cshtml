@@ -19,6 +19,17 @@
                 <span asp-validation-for="Answer.AnswerString" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="QuestionId" class="control-label">Add answer to existing question?</label>
+                <select asp-for="QuestionId" class="form-control">
+                    <option value="">No</option>
+                    @foreach (var question in Model.Questions)
+                    {
+                        <option value="@question.Id">@question.QuestionString</option>
+                    }
+                </select>
+                <span asp-validation-for="QuestionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

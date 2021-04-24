@@ -44,16 +44,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in question.Answers)
+                @foreach (var answers in question.Answers)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.AnswerString)
+                            @Html.DisplayFor(modelItem => answers.AnswerString)
                         </td>
                         <td>
-                            <a asp-page="/AnswerPages/Edit" asp-route-id="@item.Id">Edit answer</a> |
-                            <a asp-page="/AnswerPages/Details" asp-route-id="@item.Id">Answer Details</a> |
-                            <a asp-page="/AnswerPages/Delete" asp-route-id="@item.Id">Delete Answer</a>
+                            <a asp-page="/AnswerPages/Edit" asp-route-id="@answers.Id">Edit answer</a> |
+                            <a asp-page="/AnswerPages/Details" asp-route-id="@answers.Id">Answer Details</a> |
+                            <a asp-page="/AnswerPages/Delete" asp-route-id="@answers.Id">Delete Answer</a>
                         </td>
                     </tr>
                 }

@@ -34,22 +34,31 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Survey.Questions)
+            @foreach (var question in Model.Survey.Questions)
             {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.QuestionString)
+                    @Html.DisplayFor(modelItem => question.QuestionString)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.QuestionType)
+                    @Html.DisplayFor(modelItem => question.QuestionType)
                 </td>
+                @if (question.QuestionType == Models.QuestionType.Text)
+                {
+                    <td>
+                        Text questions have no stored answers
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => question.Answers.Count)
+                    </td>
+                }
                 <td>
-                    @Html.DisplayFor(modelItem => item.Answers.Count)
-                </td>
-                <td>
-                    <a asp-page="/QuestionPages/Edit" asp-route-id="@item.Id">Edit question</a> |
-                    <a asp-page="/QuestionPages/Details" asp-route-id="@item.Id">Question details</a> |
-                    <a asp-page="/QuestionPages/Delete" asp-route-id="@item.Id">Delete question</a>
+                    <a asp-page="/QuestionPages/Edit" asp-route-id="@question.Id">Edit question</a> |
+                    <a asp-page="/QuestionPages/Details" asp-route-id="@question.Id">Question details</a> |
+                    <a asp-page="/QuestionPages/Delete" asp-route-id="@question.Id">Delete question</a>
                 </td>
             </tr>
             }

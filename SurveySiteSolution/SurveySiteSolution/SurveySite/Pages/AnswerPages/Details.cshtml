@@ -20,13 +20,25 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Answer.Question.QuestionString)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Answer.Question.QuestionString)
-        </dd>
+        @if (Model.Answer.Question != null)
+        {
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Answer.Question.QuestionString)
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                Answer doesn't have a question
+            </dd>
+        }
     </dl>
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Answer.Id">Edit answer</a> |
     <a asp-page="./Index">Back to answer list</a> |
-    <a asp-page="/QuestionPages/Details" asp-route-id="@Model.Answer.Question.Id">To question that the answer belongs to</a>
+    @if (Model.Answer.Question != null)
+    {
+        <a asp-page="/QuestionPages/Details" asp-route-id="@Model.Answer.Question.Id">To question that the answer belongs to</a>
+    }
 </div>
