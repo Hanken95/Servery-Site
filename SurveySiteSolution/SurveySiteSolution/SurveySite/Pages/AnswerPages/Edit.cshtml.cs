@@ -66,7 +66,7 @@ namespace SurveySite.Pages.AnswerPages
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Details", new { id = Answer.Id });
         }
 
         private bool AnswerExists(int id)

@@ -9,31 +9,30 @@
 
 <div>
     <hr />
-    <h2>
+    <h3>
         @Html.DisplayNameFor(model => model.Survey.SurveyName) : @Html.DisplayFor(model => model.Survey.SurveyName)
-    </h2>
+    </h3>
     <hr />
     @foreach (var question in Model.Survey.Questions)
     {
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => question.QuestionString)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => question.QuestionString)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => question.QuestionType)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => question.QuestionType)
-        </dd>
-        <dt>
-            <a asp-page="/QuestionPages/Edit" asp-route-id="@question.Id">Edit question</a> |
-            <a asp-page="/QuestionPages/Details" asp-route-id="@question.Id">Question details</a> |
-            <a asp-page="/QuestionPages/Delete" asp-route-id="@question.Id">Delete question</a>
-        </dt>
-    </dl>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => question.QuestionString)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => question.QuestionString)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => question.QuestionType)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => question.QuestionType)
+            </dd>
+            <dt>
+                <a asp-page="/QuestionPages/Edit" asp-route-id="@question.Id">Edit question</a> |
+                <a asp-page="/QuestionPages/Delete" asp-route-id="@question.Id">Delete question</a>
+            </dt>
+        </dl>
         <table class="table">
             <thead>
                 <tr>
@@ -52,16 +51,18 @@
                         </td>
                         <td>
                             <a asp-page="/AnswerPages/Edit" asp-route-id="@answers.Id">Edit answer</a> |
-                            <a asp-page="/AnswerPages/Details" asp-route-id="@answers.Id">Answer Details</a> |
                             <a asp-page="/AnswerPages/Delete" asp-route-id="@answers.Id">Delete Answer</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+        <br />
+        <hr />
     }
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Survey.Id">Edit survey name</a> |
-    <a asp-page="./Index">Back tosurvey list</a>
+    <a asp-page="./Delete" asp-route-id="@Model.Survey.Id">Delete survey</a> |
+    <a asp-page="/Index">Back to survey list</a>
 </div>

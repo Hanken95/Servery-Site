@@ -65,7 +65,7 @@ namespace SurveySite.Pages.SurveyPages
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Details", new { id = Survey.Id });
         }
 
         private bool SurveyExists(int id)
