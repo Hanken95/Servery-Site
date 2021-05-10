@@ -16,36 +16,46 @@
 </form>
 
 <br />
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Surveys[0].SurveyName)
-            </th>
-            <th>
-                Nr. of Questions
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Surveys)
-        {
+@if (Model.Surveys.Count > 0)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SurveyName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Questions.Count)
-                </td>
-                <td>
-                    <a asp-page="/SurveyPages/Edit" asp-route-id="@item.Id">Edit survey name</a> |
-                    <a asp-page="/SurveyPages/Details" asp-route-id="@item.Id">More details</a> |
-                    <a asp-page="/SurveyPages/Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-page="/SurveyPages/CompleteSurvey" asp-route-surveyId="@item.Id">Complete survey details</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Surveys[0].SurveyName)
+                </th>
+                <th>
+                    Nr. of Questions
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Surveys)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SurveyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Questions.Count)
+                    </td>
+                    <td>
+                        <a asp-page="/SurveyPages/Edit" asp-route-id="@item.Id">Edit survey name</a> |
+                        <a asp-page="/SurveyPages/Details" asp-route-id="@item.Id">More details</a> |
+                        <a asp-page="/SurveyPages/Delete" asp-route-id="@item.Id">Delete</a> |
+                        <a asp-page="/SurveyPages/CompleteSurvey" asp-route-surveyId="@item.Id">Complete survey details</a>
+                    </td>
+                </tr>
+            }
+            
+        </tbody>
+    </table>
+}
+else
+{
+    <p>
+        No available surveys
+    </p>
+}

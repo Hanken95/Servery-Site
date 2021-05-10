@@ -12,11 +12,11 @@ namespace SurveySite.Pages.AnswerPages
 {
     public class CreateMultipleAnswersModel : PageModel
     {
-        private readonly SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public CreateMultipleAnswersModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         [BindProperty]
@@ -41,11 +41,11 @@ namespace SurveySite.Pages.AnswerPages
                 return NotFound();
             }
 
-            Question = await _context.Question.FirstOrDefaultAsync(q => q.Id == questionId);
-            await _context.Survey.ToListAsync();
+            Question = await _databaseLogic.GetQuestion(questionId);
+            await _databaseLogic.GetAllSurveys();
             if (Question.Survey != null)
             {
-                Survey = await _context.Survey.FirstOrDefaultAsync(s => s.Id == Question.Survey.Id);
+                Survey = await _databaseLogic.GetSurvey(Question.Survey.Id);
             }
 
 
@@ -66,24 +66,8 @@ namespace SurveySite.Pages.AnswerPages
                 return Page();
             }
 
-            Question.Answers.Add(Answer);
-            _context.Attach(Question).State = EntityState.Modified;
+            await _databaseLogic.CreateAnswer(Answer, Question.Id);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!QuestionExists(Question.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
             NumberOfAnswersLeft -= 1;
             if (NumberOfAnswersLeft > 0)
             {
@@ -114,12 +98,52 @@ namespace SurveySite.Pages.AnswerPages
                 new {
                     surveyId = Survey.Id
                 });
-            
         }
 
-        private bool QuestionExists(int id)
+        public IActionResult OnPostAddAnswer()
         {
-            return _context.Question.Any(e => e.Id == id);
+            NumberOfAnswersLeft++;
+            return RedirectToPage(
+                    new
+                    {
+                        numberOfAnswers = NumberOfAnswersLeft,
+                        numberOfQuestionsLeft = NumberOfQuestionsLeft,
+                        questionId = Question.Id
+                    });
+        }
+
+        public IActionResult OnPostOneFewerAnswer()
+        {
+            NumberOfAnswersLeft--;
+            if (NumberOfAnswersLeft < 1)
+            {
+                if (NumberOfQuestionsLeft == null)
+                {
+                    return RedirectToPage(
+                    "/QuestionPages/Details", new { id = Question.Id });
+                }
+                else if (NumberOfQuestionsLeft < 1)
+                {
+                    return RedirectToPage("/SurveyPages/CompleteSurvey", new { surveyId = Survey.Id });
+                }
+                else
+                {
+                    return RedirectToPage(
+                    "/QuestionPages/CreateMultipleQuestions",
+                    new
+                    {
+                        numberOfQuestionsLeft = NumberOfQuestionsLeft,
+                        surveyId = Survey.Id
+                    });
+                }
+            }
+            return RedirectToPage(
+                    new
+                    {
+                        numberOfAnswers = NumberOfAnswersLeft,
+                        numberOfQuestionsLeft = NumberOfQuestionsLeft,
+                        questionId = Question.Id
+                    });
         }
     }
 }

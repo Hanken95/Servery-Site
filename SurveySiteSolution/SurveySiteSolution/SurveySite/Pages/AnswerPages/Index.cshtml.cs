@@ -12,18 +12,19 @@ namespace SurveySite.Pages.AnswerPages
 {
     public class IndexModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
-        public IndexModel(SurveySite.SurveyDBContext context)
+        public IndexModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
-        public IList<Answer> Answer { get;set; }
+        public IList<Answer> Answers { get;set; }
 
         public async Task OnGetAsync()
         {
-            Answer = await _context.Answer.ToListAsync();
+            Answers = await _databaseLogic.GetAllAnswers();
+            await _databaseLogic.GetAllQuestions();
         }
     }
 }

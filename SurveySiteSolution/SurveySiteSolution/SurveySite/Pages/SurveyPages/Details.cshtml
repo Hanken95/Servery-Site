@@ -17,6 +17,8 @@
             @Html.DisplayFor(model => model.Survey.SurveyName)
         </dd>
     </dl>
+    @if (Model.Survey.Questions.Count > 0)
+    {
     <table class="table">
         <thead>
             <tr>
@@ -63,6 +65,13 @@
             }
         </tbody>
     </table>
+    }
+    else
+    {
+        <p>
+            No questions in survey
+        </p>
+    }
 </div>
 
 <div>

@@ -12,14 +12,18 @@ namespace SurveySite.Pages.QuestionPages
 {
     public class CompleteSurveyModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
-        public CompleteSurveyModel(SurveySite.SurveyDBContext context)
+        public CompleteSurveyModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
+        [BindProperty]
         public Survey Survey { get; set; }
+
+        [BindProperty]
+        public Question Question { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? surveyId)
         {
@@ -28,15 +32,25 @@ namespace SurveySite.Pages.QuestionPages
                 return NotFound();
             }
 
-            Survey = await _context.Survey.FirstOrDefaultAsync(m => m.Id == surveyId);
-            await _context.Question.ToListAsync();
-            await _context.Answer.ToListAsync();
+            Survey = await _databaseLogic.GetSurvey(surveyId);
+            await _databaseLogic.GetAllQuestions();
 
             if (Survey == null)
             {
                 return NotFound();
             }
             return Page();
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            await _databaseLogic.RemoveQuestionFromSurvey(Question.Id, Survey.Id);
+
+            return RedirectToPage(new { surveyId = Survey.Id });
         }
     }
 }

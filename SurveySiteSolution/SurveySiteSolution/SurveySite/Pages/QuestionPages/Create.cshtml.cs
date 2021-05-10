@@ -13,16 +13,16 @@ namespace SurveySite.Pages.QuestionPages
 {
     public class CreateModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
-        public CreateModel(SurveySite.SurveyDBContext context)
+        public CreateModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Surveys = await _context.Survey.ToListAsync();
+            Surveys = await _databaseLogic.GetAllSurveys();
             return Page();
         }
 
@@ -48,20 +48,16 @@ namespace SurveySite.Pages.QuestionPages
 
             if (SurveyId != null)
             {
-                await _context.Question.ToListAsync();
-                var survey = await _context.Survey.FirstOrDefaultAsync(s => s.Id == SurveyId);
-                survey.Questions.Add(Question);
+                await _databaseLogic.CreateQuestion(Question, SurveyId);
             }
             else
             {
-                await _context.Question.AddAsync(Question);
+                await _databaseLogic.CreateQuestion(Question);
             }
 
-            await _context.SaveChangesAsync();
-
-            if (Question.QuestionType != QuestionType.Text)
+            if (Question.QuestionType != QuestionType.Text && NumberOfAnswers > 0)
             {
-            return RedirectToPage("/AnswerPages/CreateMultipleAnswers",
+                return RedirectToPage("/AnswerPages/CreateMultipleAnswers",
                     new
                     {
                         numberOfAnswers = NumberOfAnswers,
@@ -74,7 +70,6 @@ namespace SurveySite.Pages.QuestionPages
                     {
                         id = Question.Id
                     });
-
         }
     }
 }

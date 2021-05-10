@@ -27,18 +27,22 @@
         </dt>
         @if (Model.Question.Survey != null)
         {
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Question.Survey.SurveyName)
-            </dd>
+        <dd class="col-sm-10">
+            <form method="post">
+                <input type="hidden" asp-for="Question.Id" />
+                <input type="hidden" asp-for="Survey.Id" />
+                @Html.DisplayFor(model => model.Question.Survey.SurveyName) <button>Remove question from survey</button>
+            </form>
+        </dd>
         }
         else
         {
             <dd class="col-sm-10">
-                Question doesn't have a survey
+                Question doesn't have a survey <a asp-page="AddQuestionToSurvey" asp-route-id="@Model.Question.Id">Add question to survey</a>
             </dd>
         }
     </dl>
-    @if (Model.Question.QuestionType != Models.QuestionType.Text)
+    @if (Model.Question.QuestionType != Models.QuestionType.Text && Model.Question.Answers.Count > 0)
     {
     <table class="table">
         <thead>
@@ -65,6 +69,18 @@
         </tbody>
     </table>
     }
+    else if (Model.Question.QuestionType == Models.QuestionType.Text)
+    {
+        <p>
+            Text questions have no stored answers
+        </p>
+    }
+    else
+    {
+        <p>
+            Question has no stored answers
+        </p>
+    }
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Question.Id">Edit question</a> |
@@ -72,6 +88,6 @@
     <a asp-page="./Index">To question list</a> |
     @if (Model.Question.Survey != null)
     {
-<a asp-page="/SurveyPages/Details" asp-route-id="@Model.Question.Survey.Id">To the survey that the question is in(@Model.Question.Survey.SurveyName)</a>
+        <a asp-page="/SurveyPages/Details" asp-route-id="@Model.Question.Survey.Id">To the survey that the question is in(@Model.Question.Survey.SurveyName)</a>
     }
 </div>

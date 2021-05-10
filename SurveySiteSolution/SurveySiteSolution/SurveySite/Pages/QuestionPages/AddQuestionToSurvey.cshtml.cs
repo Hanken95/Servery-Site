@@ -9,19 +9,24 @@ using Microsoft.EntityFrameworkCore;
 using SurveySite;
 using SurveySite.Models;
 
-namespace SurveySite.Pages.AnswerPages
+namespace SurveySite.Pages.QuestionPages
 {
-    public class EditModel : PageModel
+    public class AddQuestionToSurveyModel : PageModel
     {
         private readonly DatabaseLogic _databaseLogic;
 
-        public EditModel(SurveyDBContext context)
+        public AddQuestionToSurveyModel(SurveyDBContext context)
         {
             _databaseLogic = new DatabaseLogic(context);
         }
 
+        public List<Survey> Surveys { get; set; }
+
         [BindProperty]
-        public Answer Answer { get; set; }
+        public int SurveyId { get; set; }
+
+        [BindProperty]
+        public Question Question { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,9 +35,10 @@ namespace SurveySite.Pages.AnswerPages
                 return NotFound();
             }
 
-            Answer = await _databaseLogic.GetAnswer(id);
+            Question = await _databaseLogic.GetQuestion(id);
+            Surveys = await _databaseLogic.GetAllSurveys();
 
-            if (Answer == null)
+            if (Question == null)
             {
                 return NotFound();
             }
@@ -48,9 +54,8 @@ namespace SurveySite.Pages.AnswerPages
                 return Page();
             }
 
-            await _databaseLogic.EditAnswer(Answer);
-
-            return RedirectToPage("./Details", new { id = Answer.Id });
+            await _databaseLogic.AddQuestionToSurvey(Question.Id, SurveyId);
+            return RedirectToPage("./Details", new { id = Question.Id });
         }
     }
 }

@@ -11,10 +11,11 @@ namespace SurveySite.Pages.SurveyPages
 {
     public class CreateModel : PageModel
     {
-        private readonly SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
+
         public CreateModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         public IActionResult OnGet()
@@ -39,12 +40,18 @@ namespace SurveySite.Pages.SurveyPages
             {
                 return NotFound(); 
             }
-            _context.Survey.Add(Survey);
-            await _context.SaveChangesAsync();
 
+            await _databaseLogic.CreateSurvey(Survey);
+
+            if (NumberOfQuestions > 0)
+            {
+                return RedirectToPage(
+                    "/QuestionPages/CreateMultipleQuestions", 
+                    new { numberOfQuestionsLeft = NumberOfQuestions, surveyId = Survey.Id });
+            }
             return RedirectToPage(
-                "/QuestionPages/CreateMultipleQuestions", 
-                new { numberOfQuestionsLeft = NumberOfQuestions, surveyId = Survey.Id });
+                    "./Details",
+                    new { id = Survey.Id });
         }
     }
 }

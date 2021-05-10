@@ -12,14 +12,18 @@ namespace SurveySite.Pages.AnswerPages
 {
     public class DetailsModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
-        public DetailsModel(SurveySite.SurveyDBContext context)
+        public DetailsModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
+        [BindProperty]
         public Answer Answer { get; set; }
+
+        [BindProperty]
+        public Question Question { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,13 +32,26 @@ namespace SurveySite.Pages.AnswerPages
                 return NotFound();
             }
 
-            Answer = await _context.Answer.FirstOrDefaultAsync(m => m.Id == id);
-            await _context.Question.ToListAsync();
+            Answer = await _databaseLogic.GetAnswer(id);
+            Question = Answer.Question;
+            await _databaseLogic.GetAllQuestions();
+
 
             if (Answer == null)
             {
                 return NotFound();
             }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            await _databaseLogic.RemoveAnswerFromQuestion(Question.Id, Answer.Id);
             return Page();
         }
     }

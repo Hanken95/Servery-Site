@@ -13,16 +13,16 @@ namespace SurveySite.Pages.AnswerPages
 {
     public class CreateModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
-        public CreateModel(SurveySite.SurveyDBContext context)
+        public CreateModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Questions = await _context.Question.ToListAsync();
+            Questions = await _databaseLogic.GetAllQuestions();
             return Page();
         }
 
@@ -42,16 +42,12 @@ namespace SurveySite.Pages.AnswerPages
             }
             if (QuestionId != null)
             {
-                await _context.Question.ToListAsync();
-                var question = await _context.Question.FirstOrDefaultAsync(s => s.Id == QuestionId);
-                question.Answers.Add(Answer);
+                await _databaseLogic.CreateAnswer(Answer, QuestionId);
             }
             else
             {
-                await _context.Answer.AddAsync(Answer);
+                await _databaseLogic.CreateAnswer(Answer);
             }
-
-            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

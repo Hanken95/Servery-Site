@@ -36,6 +36,10 @@
             </div>
             <div class="form-group">
                 Questions left: <br />
+                @Html.DisplayFor(model => model.NumberOfQuestionsLeft)
+            </div>
+            <div class="form-group">
+                Answers left: <br />
                 @Html.DisplayFor(model => model.NumberOfAnswersLeft)
             </div>
             <div class="form-group">
@@ -44,11 +48,19 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        <form method="post">
+            <input type="hidden" asp-for="Survey.Id" />
+            <input type="hidden" asp-for="Question.Id" />
+            <input type="hidden" asp-for="NumberOfQuestionsLeft" />
+            <input type="hidden" asp-for="NumberOfAnswersLeft" />
+            <button asp-page-handler="AddAnswer">Add one answer</button>
+            <button asp-page-handler="OneFewerAnswer">One fewer answer</button>
+        </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="./Index">Back to survey list(The incomplete survey will still exist)</a>
+    <a asp-page="/Index">Back to survey list(The incomplete survey will still exist)</a>
 </div>
 
 @section Scripts {

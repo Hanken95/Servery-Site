@@ -10,14 +10,16 @@
 <p>
     <a asp-page="Create">Create new question</a>
 </p>
+@if (Model.Questions.Count > 0)
+{
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Question[0].QuestionString)
+                @Html.DisplayNameFor(model => model.Questions[0].QuestionString)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Question[0].QuestionType)
+                @Html.DisplayNameFor(model => model.Questions[0].QuestionType)
             </th>
             <th>
                 Nr. of answers
@@ -26,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var question in Model.Question)
+@foreach (var question in Model.Questions)
 {
         <tr>
             <td>
@@ -56,3 +58,10 @@
 }
     </tbody>
 </table>
+}
+else
+{
+    <p>
+        No available questions
+    </p>
+}

@@ -13,52 +13,86 @@
         @Html.DisplayNameFor(model => model.Survey.SurveyName) : @Html.DisplayFor(model => model.Survey.SurveyName)
     </h3>
     <hr />
-    @foreach (var question in Model.Survey.Questions)
+    @if (Model.Survey.Questions.Count > 0)
     {
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => question.QuestionString)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => question.QuestionString)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => question.QuestionType)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => question.QuestionType)
-            </dd>
-            <dt>
-                <a asp-page="/QuestionPages/Edit" asp-route-id="@question.Id">Edit question</a> |
-                <a asp-page="/QuestionPages/Delete" asp-route-id="@question.Id">Delete question</a>
-            </dt>
-        </dl>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => question.Answers[0].AnswerString)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var answers in question.Answers)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => answers.AnswerString)
-                        </td>
-                        <td>
-                            <a asp-page="/AnswerPages/Edit" asp-route-id="@answers.Id">Edit answer</a> |
-                            <a asp-page="/AnswerPages/Delete" asp-route-id="@answers.Id">Delete Answer</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <br />
-        <hr />
+        @foreach (var question in Model.Survey.Questions)
+        {
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => question.QuestionString)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => question.QuestionString)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => question.QuestionType)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => question.QuestionType)
+                </dd>
+                <dt>
+                    <a asp-page="/QuestionPages/Edit" asp-route-id="@question.Id">Edit question</a> |
+                    <a asp-page="/QuestionPages/Delete" asp-route-id="@question.Id">Delete question</a>
+                </dt>
+            </dl>
+            <form method="post">
+                <input type="hidden" asp-for="@question.Id" />
+                <input type="hidden" asp-for="@question.QuestionString" />
+                <input type="hidden" asp-for="Survey.Id" />
+                <button>Remove question from survey</button>
+            </form>
+            <br />
+            @if (question.QuestionType != Models.QuestionType.Text && question.Answers.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => question.Answers[0].AnswerString)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var answers in question.Answers)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => answers.AnswerString)
+                                </td>
+                                <td>
+                                    <a asp-page="/AnswerPages/Edit" asp-route-id="@answers.Id">Edit answer</a> |
+                                    <a asp-page="/AnswerPages/Delete" asp-route-id="@answers.Id">Delete Answer</a>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            No answers in this Question
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            else if(question.QuestionType == Models.QuestionType.Text)
+            {
+                <p>
+                    Text questions have no stored answers
+                </p>
+            }
+            else
+            {
+                <p>
+                    Question has no stored answers
+                </p>
+            }
+                <br />
+                <hr />
+        }
+    }
+    else
+    {
+        <p>
+            No Questions in this survey
+        </p>
     }
 </div>
 <div>

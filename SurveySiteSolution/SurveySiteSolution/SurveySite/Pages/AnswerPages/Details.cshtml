@@ -21,15 +21,19 @@
         </dt>
         @if (Model.Answer.Question != null)
         {
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Answer.Question.QuestionString)
-            </dd>
+        <dd class="col-sm-10">
+            <form method="post">
+                <input type="hidden" asp-for="Answer.Id" />
+                <input type="hidden" asp-for="Question.Id" />
+                @Html.DisplayFor(model => model.Answer.Question.QuestionString) <button>Remove question from survey</button>
+            </form>
+        </dd>
         }
         else
         {
-            <dd class="col-sm-10">
-                Answer doesn't have a question
-            </dd>
+        <dd class="col-sm-10">
+            Answer doesn't have a question <a asp-page="AddAnswerToQuestion" asp-route-id="@Model.Answer.Id">Add answer to question</a>
+        </dd>
         }
     </dl>
 </div>

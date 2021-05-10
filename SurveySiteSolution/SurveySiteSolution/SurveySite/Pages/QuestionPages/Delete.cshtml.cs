@@ -12,11 +12,11 @@ namespace SurveySite.Pages.QuestionPages
 {
     public class DeleteModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public DeleteModel(SurveySite.SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         [BindProperty]
@@ -29,8 +29,8 @@ namespace SurveySite.Pages.QuestionPages
                 return NotFound();
             }
 
-            Question = await _context.Question.FirstOrDefaultAsync(m => m.Id == id);
-            await _context.Answer.ToListAsync();
+            Question = await _databaseLogic.GetQuestion(id);
+            await _databaseLogic.GetAllAnswers();
 
             if (Question == null)
             {
@@ -46,18 +46,7 @@ namespace SurveySite.Pages.QuestionPages
                 return NotFound();
             }
 
-            Question = await _context.Question.FindAsync(id);
-            await _context.Answer.ToListAsync();
-
-            if (Question != null)
-            {
-                _context.Question.Remove(Question);
-                foreach (var answer in Question.Answers)
-                {
-                    _context.Answer.Remove(answer);
-                }
-                await _context.SaveChangesAsync();
-            }
+            await _databaseLogic.DeleteQuestion(Question);
 
             return RedirectToPage("./Index");
         }

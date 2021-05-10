@@ -47,11 +47,17 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        <form method="post">
+            <input type="hidden" asp-for="Survey.Id" />
+            <input type="hidden" asp-for="NumberOfQuestionsLeft" />
+            <button asp-page-handler="AddQuestion">Add question</button>
+            <button asp-page-handler="OneFewerQuestion">One fewer question</button>
+        </form>
     </div>
 </div>
 
 <div>
-    <a asp-page="/SurveyPages/Index">Back to survey list(The incomplete survey will still exist)</a>
+    <a asp-page="/Index">Back to survey list(The incomplete survey will still exist)</a>
 </div>
 
 @section Scripts {

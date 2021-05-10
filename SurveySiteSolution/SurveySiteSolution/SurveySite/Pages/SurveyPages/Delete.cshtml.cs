@@ -11,11 +11,11 @@ namespace SurveySite.Pages.SurveyPages
 {
     public class DeleteModel : PageModel
     {
-        private readonly SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public DeleteModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         [BindProperty]
@@ -28,8 +28,8 @@ namespace SurveySite.Pages.SurveyPages
                 return NotFound();
             }
 
-            Survey = await _context.Survey.FirstOrDefaultAsync(m => m.Id == id);
-            await _context.Question.ToListAsync();
+            Survey = await _databaseLogic.GetSurvey(id);
+            await _databaseLogic.GetAllQuestions();
 
             if (Survey == null)
             {
@@ -38,33 +38,16 @@ namespace SurveySite.Pages.SurveyPages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (id == null)
+            if (Survey == null)
             {
                 return NotFound();
             }
 
-            Survey = await _context.Survey.FindAsync(id);
-            await _context.Question.ToListAsync();
-            await _context.Answer.ToListAsync();
+            await _databaseLogic.DeleteSurvey(Survey);
 
-
-            if (Survey != null)
-            {
-                _context.Survey.Remove(Survey);
-                foreach (var question in Survey.Questions)
-                {
-                    _context.Question.Remove(question);
-                    foreach (var answer in question.Answers)
-                    {
-                        _context.Answer.Remove(answer);
-                    }
-                }
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Index");
         }
     }
 }

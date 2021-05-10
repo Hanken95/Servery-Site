@@ -13,11 +13,11 @@ namespace SurveySite.Pages.QuestionPages
 {
     public class EditModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public EditModel(SurveySite.SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         [BindProperty]
@@ -30,7 +30,7 @@ namespace SurveySite.Pages.QuestionPages
                 return NotFound();
             }
 
-            Question = await _context.Question.FirstOrDefaultAsync(m => m.Id == id);
+            Question = await _databaseLogic.GetQuestion(id);
 
             if (Question == null)
             {
@@ -48,30 +48,12 @@ namespace SurveySite.Pages.QuestionPages
                 return Page();
             }
 
-            _context.Attach(Question).State = EntityState.Modified;
-
-            try
+            if(await _databaseLogic.EditQuestion(Question))
             {
-                await _context.SaveChangesAsync();
+                return RedirectToPage("./Details", new { id = Question.Id });
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!QuestionExists(Question.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Details", new { id = Question.Id });
+            return NotFound();
         }
 
-        private bool QuestionExists(int id)
-        {
-            return _context.Question.Any(e => e.Id == id);
-        }
     }
 }

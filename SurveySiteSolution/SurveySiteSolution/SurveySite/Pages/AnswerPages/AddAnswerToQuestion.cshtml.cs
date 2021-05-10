@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,14 +11,19 @@ using SurveySite.Models;
 
 namespace SurveySite.Pages.AnswerPages
 {
-    public class EditModel : PageModel
+    public class AddAnswerToQuestionModel : PageModel
     {
         private readonly DatabaseLogic _databaseLogic;
 
-        public EditModel(SurveyDBContext context)
+        public AddAnswerToQuestionModel(SurveyDBContext context)
         {
             _databaseLogic = new DatabaseLogic(context);
         }
+
+        public List<Question> Questions { get; set; }
+
+        [BindProperty]
+        public int QuestionId { get; set; }
 
         [BindProperty]
         public Answer Answer { get; set; }
@@ -31,6 +36,7 @@ namespace SurveySite.Pages.AnswerPages
             }
 
             Answer = await _databaseLogic.GetAnswer(id);
+            Questions = await _databaseLogic.GetAllQuestions();
 
             if (Answer == null)
             {
@@ -48,7 +54,7 @@ namespace SurveySite.Pages.AnswerPages
                 return Page();
             }
 
-            await _databaseLogic.EditAnswer(Answer);
+            await _databaseLogic.AddAnswerToQuestion(Answer, QuestionId);
 
             return RedirectToPage("./Details", new { id = Answer.Id });
         }

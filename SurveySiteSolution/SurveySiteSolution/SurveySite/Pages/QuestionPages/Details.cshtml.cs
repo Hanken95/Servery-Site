@@ -12,14 +12,18 @@ namespace SurveySite.Pages.QuestionPages
 {
     public class DetailsModel : PageModel
     {
-        private readonly SurveySite.SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public DetailsModel(SurveySite.SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
+        [BindProperty]
         public Question Question { get; set; }
+
+        [BindProperty]
+        public Survey Survey { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,15 +32,31 @@ namespace SurveySite.Pages.QuestionPages
                 return NotFound();
             }
 
-            Question = await _context.Question.FirstOrDefaultAsync(m => m.Id == id);
-            await _context.Answer.ToListAsync();
-            await _context.Survey.ToListAsync();
+            Question = await _databaseLogic.GetQuestion(id);
+            Survey = Question.Survey;
+            await _databaseLogic.GetAllAnswers();
+            await _databaseLogic.GetAllSurveys();
+
 
             if (Question == null)
             {
                 return NotFound();
             }
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            await _databaseLogic.RemoveQuestionFromSurvey(Question.Id, Survey.Id);
+
+            Question = await _databaseLogic.GetQuestion(Question.Id);
+
+            return RedirectToPage(new { id = Question.Id });
         }
     }
 }

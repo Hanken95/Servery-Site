@@ -11,15 +11,14 @@ namespace SurveySite.Pages.SurveyPages
 {
     public class DetailsModel : PageModel
     {
-        private readonly SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public DetailsModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
         public Survey Survey { get; set; }
-
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,9 +27,8 @@ namespace SurveySite.Pages.SurveyPages
                 return NotFound();
             }
 
-            Survey = await _context.Survey.FirstOrDefaultAsync(m => m.Id == id);
-            await _context.Question.ToListAsync();
-            await _context.Answer.ToListAsync();
+            Survey = await _databaseLogic.GetSurvey(id); 
+            await _databaseLogic.GetAllQuestions();
 
             if (Survey == null)
             {

@@ -11,25 +11,25 @@ namespace SurveySite.Pages.SurveyPages
 {
     public class IndexModel : PageModel
     {
-        private readonly SurveyDBContext _context;
+        private readonly DatabaseLogic _databaseLogic;
 
         public IndexModel(SurveyDBContext context)
         {
-            _context = context;
+            _databaseLogic = new DatabaseLogic(context);
         }
 
-        public List<Survey> Surveys { get;set; }
+        public List<Survey> Surveys { get; set; } = new List<Survey>();
 
         public async Task OnGetAsync()
         {
-            Surveys = await _context.Survey.ToListAsync();
-            await _context.Question.ToListAsync();
+            Surveys = await _databaseLogic.GetAllSurveys();
+            Page();
         }
 
         public async Task OnPostSeedDataBase()
         {
-            _context.SeedDatabase();
-            Surveys = await _context.Survey.ToListAsync();
+            _databaseLogic.SeedDatabase();
+            Surveys = await _databaseLogic.GetAllSurveys();
             Page();
         }
     }
