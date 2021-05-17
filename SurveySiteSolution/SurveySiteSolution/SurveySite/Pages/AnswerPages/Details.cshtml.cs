@@ -33,8 +33,8 @@ namespace SurveySite.Pages.AnswerPages
             }
 
             Answer = await _databaseLogic.GetAnswer(id);
-            Question = Answer.Question;
             await _databaseLogic.GetAllQuestions();
+            Question = Answer.Question;
 
 
             if (Answer == null)
@@ -52,6 +52,9 @@ namespace SurveySite.Pages.AnswerPages
             }
 
             await _databaseLogic.RemoveAnswerFromQuestion(Question.Id, Answer.Id);
+
+            Answer = await _databaseLogic.GetAnswer(Answer.Id);
+
             return Page();
         }
     }

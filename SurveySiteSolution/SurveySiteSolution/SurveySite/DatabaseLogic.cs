@@ -109,9 +109,10 @@ namespace SurveySite
             return question;
         }
 
-        internal async Task<Answer> AddAnswerToQuestion(Answer answer, int? questionId)
+        internal async Task<Answer> AddAnswerToQuestion(int answerId, int? questionId)
         {
             var question = await _context.Question.FirstOrDefaultAsync(q => q.Id == questionId);
+            var answer = await _context.Answer.FirstOrDefaultAsync(a => a.Id == answerId);
             await GetAllAnswers();
             question.Answers.Add(answer);
             try

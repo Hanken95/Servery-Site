@@ -54,7 +54,7 @@ namespace SurveySite.Pages.AnswerPages
                 return Page();
             }
 
-            await _databaseLogic.AddAnswerToQuestion(Answer, QuestionId);
+            await _databaseLogic.AddAnswerToQuestion(Answer.Id, QuestionId);
 
             return RedirectToPage("./Details", new { id = Answer.Id });
         }

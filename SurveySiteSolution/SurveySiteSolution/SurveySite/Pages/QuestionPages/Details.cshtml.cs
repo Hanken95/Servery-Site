@@ -33,9 +33,9 @@ namespace SurveySite.Pages.QuestionPages
             }
 
             Question = await _databaseLogic.GetQuestion(id);
-            Survey = Question.Survey;
             await _databaseLogic.GetAllAnswers();
             await _databaseLogic.GetAllSurveys();
+            Survey = Question.Survey;
 
 
             if (Question == null)
@@ -47,14 +47,9 @@ namespace SurveySite.Pages.QuestionPages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             await _databaseLogic.RemoveQuestionFromSurvey(Question.Id, Survey.Id);
 
-            Question = await _databaseLogic.GetQuestion(Question.Id);
+            //Question = await _databaseLogic.GetQuestion(Question.Id);
 
             return RedirectToPage(new { id = Question.Id });
         }
