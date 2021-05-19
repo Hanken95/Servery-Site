@@ -59,7 +59,7 @@ namespace SurveySite.Pages.QuestionPages
                 return Page();
             }
 
-            Question = await _databaseLogic.AddQuestionToSurvey(Question.Id, Survey.Id);
+            Question = await _databaseLogic.CreateQuestion(Question, Survey.Id);
 
             NumberOfQuestionsLeft -= 1;
 

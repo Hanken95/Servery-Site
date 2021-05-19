@@ -29,12 +29,13 @@ namespace SurveySite
             await _context.SaveChangesAsync();
         }
 
-        public async Task CreateQuestion(Question question, int? surveyId)
+        public async Task<Question> CreateQuestion(Question question, int? surveyId)
         {
             var survey = await _context.Survey.FirstOrDefaultAsync(s => s.Id == surveyId);
             await _context.Question.ToListAsync();
             survey.Questions.Add(question);
             await _context.SaveChangesAsync();
+            return question;
         }
 
         public async Task CreateAnswer(Answer answer)
